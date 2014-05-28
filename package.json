@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/KellyLSB/grunt-tusks",
   "dependencies": {
+    "chalk": "^0.4.0",
     "coffee-script": "^1.7.1",
     "grunt": "^0.4.5"
   }

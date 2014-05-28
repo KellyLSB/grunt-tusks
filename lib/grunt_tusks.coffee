@@ -130,21 +130,22 @@ module.exports = T = class GruntTusks
           name: @File.fullname(filepath)
           path: @File.resolve(filepath)
 
-        # Source File Data
-        if @options.gruntReadSourceFiles || false
-          file.data = @grunt.file.read(filepath)
-
         # Source File Path relative to the project root
         file.relative = @File.relative(@Config.projectRoot, file.path)
 
         # Source File Directory
         file.dir = @File.dirname(file.path)
 
+        # Source File Data
+        if @options.gruntReadSourceFiles || false
+          @grunt.log.writeln "Reading source file \"#{file.relative}\"."
+          file.data = @grunt.file.read(filepath)
+
         # Process file and push output
         try
           (data = cb.call(f.orig, file, dest)) && output.push(data)
         catch e
-          @grunt.log.warn("Failed to process \"#{@Chalk.cyan(filepath)}\".")
+          @grunt.log.warn "Failed to process \"#{@Chalk.cyan(file.relative)}\"."
           @grunt.log.error(e)
 
       # Filter output by removing non string values
@@ -190,7 +191,7 @@ module.exports = T = class GruntTusks
   filterFileNotExist: ->
     (filepath) =>
       if ! @grunt.file.exists(filepath)
-        @grunt.log.warn("Source file \"#{filepath}\" not found.")
+        @grunt.log.warn "Source file \"#{filepath}\" not found."
         return false
       else true
 
